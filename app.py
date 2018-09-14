@@ -3,8 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:aliali@localhost/todo'
 db = SQLAlchemy(app)
 
 
@@ -13,8 +12,7 @@ class Todo(db.Model):
     title = db.Column(db.String(65))
     description=db.Column(db.String(90))
     complete = db.Column(db.Boolean)
-
-db.create_all()
+#db.create_all()
 
 
 @app.route('/', methods=['GET'])
@@ -50,13 +48,14 @@ def get_one_by_one( id):
 
 @app.route('/todo', methods=['POST'])
 def create_title():
-    data = request.get_json()
+    data = request.get_json(force=True)
 
-    new_title = Todo(title=data['title'], description=data['description'], complete=False)
+    new_title = Todo(title=data["title"], description=data["description"], complete=False)
+
     db.session.add(new_title)
     db.session.commit()
 
-    return jsonify({'message' : "Todo created!"})
+    return jsonify({'message': "Todo created!"})
 
 @app.route('/todo/<id>', methods=['DELETE'])
 def delete_todo(id):
