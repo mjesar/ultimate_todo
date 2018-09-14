@@ -15,7 +15,7 @@ class Todo(db.Model):
 #db.create_all()
 
 
-@app.route('/', methods=['GET'])
+@app.route('/todo/api/v1.0/tasks', methods=['GET'])
 def get_all():
     title = Todo.query.all()
 
@@ -31,7 +31,7 @@ def get_all():
 
     return jsonify({'title' : output})
 
-@app.route('/todo/<id>', methods=['GET'])
+@app.route('/todo/api/v1.0/tasks/<id>', methods=['GET'])
 
 def get_one_by_one( id):
     todo = Todo.query.filter_by(id=id).first()
@@ -46,7 +46,7 @@ def get_one_by_one( id):
     todo_data['complete'] = todo.complete
     return jsonify(todo_data)
 
-@app.route('/todo', methods=['POST'])
+@app.route('/todo/api/v1.0/tasks', methods=['POST'])
 def create_title():
     data = request.get_json(force=True)
 
@@ -57,7 +57,7 @@ def create_title():
 
     return jsonify({'message': "Todo created!"})
 
-@app.route('/todo/<id>', methods=['DELETE'])
+@app.route('/todo/api/v1.0/tasks/<id>', methods=['DELETE'])
 def delete_todo(id):
     todo = Todo.query.filter_by(id=id).first()
 
@@ -69,7 +69,7 @@ def delete_todo(id):
 
     return jsonify({'message' : 'title deleted'})
 
-@app.route('/todo/<id>', methods=['PUT'])
+@app.route('/todo/api/v1.0/tasks/<id>', methods=['PUT'])
 def complete_todo(id):
     todo = Todo.query.filter_by(id=id).first()
 
